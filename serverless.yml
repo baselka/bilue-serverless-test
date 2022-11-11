@@ -1,0 +1,16 @@
+service: bilue-serverless-test
+plugins:
+  - serverless-dotenv-plugin
+provider:
+  name: aws
+  runtime: nodejs16.x
+  region: ap-southeast-2
+  memorySize: 512
+functions:
+  app:
+    handler: index.handler
+    events: 
+      - http: 
+          path: /api/v1
+          method: ANY
+          cors: true

@@ -1,0 +1,39 @@
+version: "3"
+
+services:
+
+  api:
+    build: .
+    image: api
+    volumes:
+      - ./:/home/node/app/
+    networks:
+      - mic-bridge
+    depends_on: 
+      - db
+    environment:
+      - DB_URI=mongodb://db:27017/bilue
+
+
+  db:
+    image: mongo
+    ports: 
+      - "27017:27017"
+    networks:
+      - mic-bridge
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "8080:8080"
+    networks:
+      - mic-bridge
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - api
+      - db
+
+networks:
+  mic-bridge:
+    external: true
